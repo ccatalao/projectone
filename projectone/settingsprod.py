@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
+
 import os
 
 from pathlib import Path
@@ -84,6 +85,9 @@ WSGI_APPLICATION = 'projectone.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'OPTIONS': {
+                'options': '-c search_path=myschema'
+            },
         'NAME': 'projectone',
         'USER': 'projectoneuser',
         'PASSWORD': os.environ.get('DB_PASSWORD', ''),
