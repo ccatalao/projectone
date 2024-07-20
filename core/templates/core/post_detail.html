@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<style>
+    h1 {
+    text-align: center;
+    font-size: 4em;
+  font-family: medium-content-title-font, Georgia, Cambria, "Times New Roman", Times, serif; 
+}
+
+#article_area {
+  border: 1px;
+ margin: 0 auto;
+  width: 75%;
+  padding: 2px 5px;
+}
+
+.article h2 {
+  font-size: 1.5em;
+}
+
+.article p {
+  font-size: 1.25em;
+}
+#articleHeader a {
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+}
+#authorInfo {
+  font-size: 0.9em;
+}
+#authorInfo img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.centeredImage {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+h3 {
+    text-align: center;
+    font-size: 1.25em;
+   }
+body {
+  background-color: white;
+  font-family: onezero-yelliz, sans-serif;
+}
+.pictureDescription {
+  color: grey;
+}
+blockquote {
+  font-style: italic;
+}
+
+</style>
+
+  <div class="container">
+        <!--
+        <h1>{{ post.title }}</h1>
+
+        {% if post.published_date %}
+            <div class="date postdate">
+                {{ post.published_date }}
+            </div>
+
+        {% else %}
+            <div>Post not published yet</div>
+        {% endif %}
+    -->
+
+      <!--<p class='postcontent' >{{ post.text|safe|linebreaksbr }}</p><-->
+      <p class='postcontent' >{{ post.html_content|safe}}</p>
+
+
+</div>
+
+{% endblock %}
