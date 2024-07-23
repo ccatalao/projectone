@@ -21,12 +21,20 @@ class Post(models.Model):
     audio_file = models.FileField(blank=True, null=True, upload_to=upload_directory)
     image_file = models.FileField(blank=True, null=True, upload_to=upload_directory)
     category        = models.TextField(blank=True, null=True, help_text='Separate each item by comma')
-    img_label       = models.TextField(blank=True, null=True, help_text='Separate each item by comma')
+    img_label       = models.TextField(blank=True, null=True, help_text='Separate each item by comma') 
     featured        = models.BooleanField(default=False)
     active          = models.BooleanField(default=True)
-    is_digital      = models.BooleanField(default=False) # User Library   
+    is_digital      = models.BooleanField(default=False)   
     created_date = models.DateTimeField(default=timezone.now)
     published_date = models.DateTimeField(blank=True, null=True)
+    alert = models.CharField(max_length=200,blank=True, null=True)   
+    tags = models.TextField(blank=True, null=True, help_text='Separate each item by comma') 
+    content = models.TextField(blank=True, null=True)
+    name = models.CharField(max_length=1024,blank=True, null=True)
+    lide = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    notes = models.TextField(blank=True, null=True)
+
 
 
     def get_absolute_url(self):
