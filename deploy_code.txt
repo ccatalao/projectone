@@ -8,13 +8,6 @@ ssh root@IP
 ########################################
 
 ssh root@167.71.34.9
-passw: cca123Admin
-
-Para o Django projectone, aceder a admin com:
-Username: carlosalves
-Password: cca12345
-
-
 
 
 sudo apt update
@@ -466,8 +459,17 @@ Para fazer backup da base de dados Postgres para ficheiro JSON, usar o Django sh
 
 Para importar para a base de dados local (em dbsqlit)
 
-Ir para o local
-/webapps/projectone# source env/bin/activate
+Ir para o local:
+copiar do servidor o savedata.json atualizado
+limpar as directorias de migrations 
+apagar o dbsqlite
+
+na directoria do manage.py:
+python manage.py makemigrations core
+python manage.py migrate --force
+python manage.py createsuperuser   
+
+/webapps/projectone# source env/bin/activate (se o ambiente não estiver já ativo)
 /webapps/projectone/projectone# python manage.py shell
 
 Executar o script de python para exportar o ficheiro JSON, savedata.json para o modelo Django:
