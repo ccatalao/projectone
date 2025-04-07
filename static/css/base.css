@@ -1,0 +1,124 @@
+/* Base styles */
+:root {
+    --primary-color: #2D3436;
+    --secondary-color: #636E72;
+    --accent-color: #0984E3;
+    --background-color: #FFFFFF;
+    --light-gray: #F1F2F6;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--primary-color);
+    background-color: var(--background-color);
+}
+
+/* Modern Navigation Styles */
+.navbar {
+    padding: 1rem 2rem;
+    background-color: var(--background-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+}
+
+.navbar-brand img {
+    height: 40px;
+    width: auto;
+}
+
+.navbar-toggler {
+    border: none;
+    padding: 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.nav-link {
+    color: var(--primary-color);
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+    color: var(--accent-color);
+}
+
+/* Search bar styling */
+.search-form {
+    position: relative;
+    max-width: 300px;
+    width: 100%;
+}
+
+.search-form input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--light-gray);
+    border-radius: 50px;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.search-form input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 2px rgba(9,132,227,0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-collapse {
+        background-color: var(--background-color);
+        padding: 1rem;
+        border-radius: 8px;
+        margin-top: 0.5rem;
+    }
+
+    .search-form {
+        margin-top: 1rem;
+        max-width: 100%;
+    }
+}
+
+/* Additional modern styles */
+.container-fluid {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Fix Bootstrap overrides */
+.navbar-nav .nav-link {
+    color: var(--primary-color) !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--accent-color) !important;
+}
+
+.navbar-toggler {
+    padding: 0.25rem 0.75rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    background-color: transparent;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    transition: box-shadow 0.15s ease-in-out;
+}
+
+.form-control {
+    border-radius: 50px !important;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 0.2rem rgba(9,132,227,0.25) !important;
+} 

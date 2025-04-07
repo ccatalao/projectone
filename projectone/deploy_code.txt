@@ -469,6 +469,9 @@ python manage.py makemigrations core
 python manage.py migrate --force
 python manage.py createsuperuser   
 
+user: cxarlosalves
+pass: cca123456
+
 /webapps/projectone# source env/bin/activate (se o ambiente não estiver já ativo)
 /webapps/projectone/projectone# python manage.py shell
 

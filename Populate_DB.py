@@ -1,3 +1,10 @@
+import os
+import django
+
+# Set up Django's settings
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'projectone.settings')
+django.setup()
+
 from django.http import JsonResponse
 from django.core.serializers import serialize
 import json
