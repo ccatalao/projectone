@@ -75,7 +75,9 @@ blockquote {
     -->
 
       <!--<p class='postcontent' >{{ post.text|safe|linebreaksbr }}</p><-->
-      <p class='postcontent' >{{ post.html_content|safe}}</p>
+      <div class="postcontent">
+        {{ post.html_content|safe }}
+      </div>
 
 
 </div>

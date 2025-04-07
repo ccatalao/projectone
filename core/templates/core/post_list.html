@@ -4,93 +4,86 @@
 
 {% block content %}
 <div class="container">
-      <hr>
+    <hr>
     <h3>Research</h3>
-    <p></p>
-<div class="wrapper wrapper-light">
-  <div class="scrollable-container">
-    <div class="scrollable-cards">
+    <div class="wrapper wrapper-light">
+        <div class="scrollable-container">
+            <div class="scrollable-cards">
+                {% for post in post_list %}
+                    {% if post.category == "research"  %}
+                    <div class="card-h">
+                        <div class="card-thumbnail">
+                            <a href="{% url 'post_detail' pk=post.pk %}"><img src={{ post.img_link }}></a>
 
-    {% for post in post_list %}
-          {% if post.category == "research"  %}
-      <div class="card-h">
-        <div class="card-thumbnail">
-          <a href="{% url 'post_detail' pk=post.pk %}"><img src={{ post.img_link }}></a>
+                            {% if post.alert  %}
+                            <div class="tag tag-primary card-tag">
 
-          {% if post.alert  %}
-          <div class="tag tag-primary card-tag">
+                                {{ post.alert }}
+                            </div>
+                            {% endif %}
 
-            {{ post.alert }}
-          </div>
-          {% endif %}
+                            <div class="card-specialties">
+                                {% if post.img_label %}
+                                    {% for item in post.get_img_label %}{{ item }} <br>{% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                {{ post.title }}
+                            </h3>
+                            <div class="card-name">
+                                {{ post.text|truncatechars:60 }}
+                            </div>
+                        </div>
 
-          <div class="card-specialties">
-            {% if post.img_label %}
-              {% for item in post.get_img_label %}{{ item }} <br>{% endfor %}
-           {% endif %}
-          </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
-        <div class="card-body">
-          <h3 class="card-title">
-            {{ post.title }}
-          </h3>
-          <div class="card-name">
-            {{ post.text|truncatechars:60 }}
-          </div>
-        </div>
-
-      </div>
-          {% endif %}
-      {% endfor %}
     </div>
-  </div>
-</div>
 
-<p></p>
-      <hr>
+    <hr>
     <h3>Photography and travel</h3>
-        <p></p>
-<div class="wrapper wrapper-light">
-  <div class="scrollable-container">
-    <div class="scrollable-cards">
+    <div class="wrapper wrapper-light">
+        <div class="scrollable-container">
+            <div class="scrollable-cards">
+                {% for post in post_list %}
+                    {% if post.category != "research"  %}
+                    <div class="card-h">
+                        <div class="card-thumbnail">
+                            <a href="{% url 'post_detail' pk=post.pk %}"><img src={{ post.img_link }}></a>
 
-    {% for post in post_list %}
-          {% if post.category != "research"  %}
-      <div class="card-h">
-        <div class="card-thumbnail">
-          <a href="{% url 'post_detail' pk=post.pk %}"><img src={{ post.img_link }}></a>
+                            {% if post.alert  %}
+                            <div class="tag tag-primary card-tag">
 
-          {% if post.alert  %}
-          <div class="tag tag-primary card-tag">
+                                {{ post.alert }}
+                            </div>
+                            {% endif %}
 
-            {{ post.alert }}
-          </div>
-          {% endif %}
+                            <div class="card-specialties">
+                                {% if post.img_label %}
+                                    {% for item in post.get_img_label %}{{ item }} <br>{% endfor %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <h3 class="card-title">
+                                {{ post.title }}
+                            </h3>
+                            <div class="card-name">
+                                {{ post.text|truncatechars:60 }}
+                            </div>
+                        </div>
 
-          <div class="card-specialties">
-            {% if post.img_label %}
-              {% for item in post.get_img_label %}{{ item }} <br>{% endfor %}
-           {% endif %}
-          </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
-        <div class="card-body">
-          <h3 class="card-title">
-            {{ post.title }}
-          </h3>
-          <div class="card-name">
-            {{ post.text|truncatechars:60 }}
-          </div>
-        </div>
-
-      </div>
-          {% endif %}
-      {% endfor %}
     </div>
-  </div>
 </div>
-
-
-</div> <!-- close div container -->
 {% endblock %}
 
 
