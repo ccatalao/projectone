@@ -1,0 +1,24 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="container">
+    <h3>Flickr Albums</h3>
+    <div class="wrapper wrapper-light">
+        <div class="scrollable-container">
+            <div class="scrollable-cards">
+                {% for album in albums %}
+                <div class="card-h">
+                    <div class="card-thumbnail">
+                        <img src="{{ album.cover_photo_url }}" alt="{{ album.title }}">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ album.title }}</h5>
+                        <p class="card-text">{{ album.photo_count }} photos</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
