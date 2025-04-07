@@ -7,7 +7,7 @@
         <div class="scrollable-container">
             <div class="scrollable-cards">
                 {% for album in albums %}
-                <div class="card-h">
+                <div class="card-h" onclick="window.location.href='{% url 'flickr_album_detail' album.flickr_id %}'" style="cursor: pointer;">
                     <div class="card-thumbnail">
                         <img src="{{ album.cover_photo_url }}" alt="{{ album.title }}">
                     </div>
