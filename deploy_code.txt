@@ -1,0 +1,478 @@
+NOVO SUPERUSER
+carloalves
+cca123Admin
+
+ssh root@IP
+########################################
+# UPDATE AND INSTALL SOFTWARE
+########################################
+
+ssh root@167.71.34.9
+
+
+sudo apt update
+
+sudo apt upgrade
+
+sudo apt install python3-pip python3-dev libpq-dev postgresql postgresql-contrib nginx certbot python3-certbot-nginx supervisor
+
+# [12:00] CONFIGURE postgresql / Create user and group
+
+sudo -u postgres psql
+### Error: access denied!!!
+
+########################################
+CREATE DATABASE projectone;
+########################################
+
+CREATE DATABASE projectdb;
+CREATE USER projectoneuserdb WITH PASSWORD 'projectonepassword';
+
+GRANT ALL PRIVILEGES ON DATABASE "projectdb" to projectoneuserdb;
+
+\connect projectdb
+
+ALTER ROLE projectoneuserdb  SET client_encoding TO 'utf8';
+ALTER ROLE projectoneuserdb SET default_transaction_isolation TO 'read committed';
+ALTER ROLE projectoneuserdb SET timezone TO 'UTC';
+
+ALTER DATABASE projectdb OWNER TO projectoneuserdb;
+
+
+Ls
+
+## para sair do postgres:
+\q  ## quit
+
+
+########################################
+# [1600] CREATE virtual environment
+########################################
+
+sudo pip3 install --upgrade pip --break-system-packages
+
+# criar directoria onde vão ficar as apps do projecto
+mkdir /webapps
+
+cd /webapps/
+
+ls
+
+mkdir projectone
+cd projectone/
+ls
+
+# cria o ambiente virtual
+apt install python3.12-venv
+python3 -m venv env 
+
+#criar um grupo
+sudo groupadd --system webapps
+sudo useradd --system --gid webapps --shell /bin/bash --home /webapps/projectone projectoneuser
+
+# [19:50] SETUP requirements file
+# (video 20:20, e já dá ver o site pelo IP)
+
+ pip freeze
+ pip freeze > requirements.txt
+
+Add to requirements.txt:
+psycopg2-binary==2.9.9
+dotenv==0.0.5
+gunicorn==21.2.0
+
+
+
+
+
+
+########################################
+# [22:20]CREATE separate settings file
+########################################
+
+Criar um ficheiro settings separado, para produção:
+settingsprod.py
+
+Alterar:
+DEBUG = False
+
+SECRET_KEY = os.environ.get('SECRET_KEY', '')
+
+Antes de from Pathlib import Path:
+import os
+
+Depois de from Pathlib import Path:
+from dotenv import load_dotenv
+
+load_dotenv()
+
+Em DATBASES, acrescentar:
+'PASSWORD': os.environ.get('DB_PASSWORD', '')
+Alterar 'ENGINE' para 'Django.db.backends.postgresql_psycopg2'
+Alterar NAME para 'projectone
+Acrescentar:
+'USER': 'projectoneuser',
+'HOST: 'localhost',
+'PORT': ''
+
+
+########################################
+# [25:30] SEND code to GitHub
+########################################
+Criar repositório em github/ccatalão:
+projectone
+
+Na directoria ´projectos'(em local) que tem manage.py criar:
+Em local, criar READ.ME:
+echo "# projectone" >> README.md
+
+Depois
+git init
+
+git status
+
+
+Na directoria ´projectos'(em local) que tem manage.py criar:
+.gitignore
+Com:
+
+*.pyc
+*/*.pyc
+*/*/*.pyc
+
+env
+
+db.sqlite3
+
+Gravar .gitignore e novos comandos:
+git add .
+
+git commit -m "first commit"
+
+git branch -M main
+
+git remote add origin https://github.com/ccatalao/projectone.git
+
+git push -u origin main (mas primeiro é necessário criar um token no GitHub:
+
+Ir para GitHub.com/settings/
+No menu lateral, escolher "Personal accsss tokens"
+Clicar botão generate
+Depois de copiar o token:
+git push -u origin main
+
+Quando pedir password para GitHub, entrar o token copiado (via paste, claro)
+
+Ir ao repositório projectone no GitHub para ver o resultado
+
+Depois, de volta ao servidor:
+Em webapps/projectone
+git clone https://github.com/ccatalao/projectone.git
+
+
+
+
+
+########################################
+# [31:40] SET UP env file
+########################################
+
+No servidor:
+$ cd projectone
+(Na directoria do projecto, isto é, com manage.py):
+
+Criar o ficheiro  .env e entrar:
+SECRET_KEY=khnlkhlkfwsscagfdhscfweertermnsdfwmn
+DB_PASSWORD=projectonepassword
+
+cat .env para ver o conteúdo
+
+################################################
+# [33:30] INSTALL software from requirements.txt
+################################################
+
+cd ..
+(Em webapps/projectone):
+source env/bin/activate
+
+pip install -r projectone/requirements.txt
+
+(Resolver o problema com o dotenv, instalar nova versão e fazer push e commit para o GitHub)
+Para tal, voltar ao local, alterar o requirements.txt:
+Substituir o dotenv por python-dotenv==1.0.1
+
+Ir para projectone (com manage.py e requirements.txt)
+cd projectone
+
+git status (para verificar que ocorreram mudanças em requirements.txt e falta atualizar o repositório
+
+git add requirements.txt. (para upload no GitHub)
+
+git commit -m "changed requirements.txt"
+
+git push
+
+git stash
+
+Voltar ao servidor, na directoria do requirements.txt
+
+git pull
+
+Se der erro de "dubious ownership no GitHub:  (que é sinal que estamos como rootuser
+No servidor, mudar para projectoneuser user:
+sudo su - projectoneuser
+
+Fazer de novo o git pull
+
+Sair deste user Com control-d
+
+git checkout requirements.txt
+
+Re-instalar a partir do requirements.txt atualizado:
+pip install -r requirements.txt
+########################################
+# [35:30] INITIALIZE the database
+########################################
+
+Porque o manage.py está a apontar para o settings.py base, é necessário alterar nome settingsprod.py para settings.py
+
+python manage.py migrate
+
+
+
+########################################
+# [36:40] CONFIGURE unicorn
+########################################
+
+Criar script a partir de webspps/projectone (directoria com env)
+
+cd ..
+
+touch env/bin/gunicorn_start
+
+Nano env/bin/gunicorn_start
+Com o seguinte conteúdo:
+
+#!/bin/bash
+
+NAME="projectone"
+DJANGODIR=/webapps/projectone/projectone
+echo "DJANGO_SETTINGS_MODULE $DJANGO_SETTINGS_MODULE"
+SOCKFILE=/webapps/projectone/run/gunicorn.sock
+USER=projectoneuser
+GROUP=webapps
+NUM_WORKERS=3
+DJANGO_SETTINGS_MODULE=projectone.settings
+DJANGO_WSGI_MODULE=projectone.wsgi
+TIMEOUT=120
+echo "Starting $NAME as `whoami`"
+
+cd $DJANGODIR
+echo "DJANGODIR $DJANGODIR"
+echo "DJANGO_SETTINGS_MODULE $DJANGO_SETTINGS_MODULE"
+source ../env/bin/activate
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export PYTHONPATH=$DJANGODIR:$PYTHONPATH
+
+RUNDIR=$(dirname $SOCKFILE)
+test -d $RUNDIR || mkdir -p $RUNDIR
+echo "RUNDIR $RUNDIR"
+echo "DJANGO_WSGI_MODULE $DJANGO_WSGI_MODULE"
+
+exec ../env/bin/gunicorn $DJANGO_WSGI_MODULE:application \
+  --name $NAME \
+  --workers $NUM_WORKERS \
+  --timeout $TIMEOUT \
+  --user=$USER --group=$GROUP \
+  --bind=unix:$SOCKFILE \
+  --log-level=debug \
+  --log-file=-
+
+Guardar o ficheiro gunicorn_start (ctl X)
+
+Testar:
+./env/bin/gunicorn_start 
+
+Resulta em erro permission denied
+
+Para resolver:
+chmod +x ./env/bin/gunicorn_start
+
+chown -R 
+
+./env/bin/gunicorn_start 
+
+ls -larth
+
+chown -R projectoneuser:webapps .
+
+ls -larth
+
+./env/bin/gunicorn_start 
+
+
+########################################
+# [45:30] SET Supervisor
+########################################
+
+Criar um ficheiro de settings para o supervisor
+
+nano /etc/supervisor/conf.d/projectone.conf
+Inserir:
+[program:projectone]
+command = /webapps/projectone/env/bin/gunicorn_start
+user = projectoneuser
+stdout_logfile = /webapps/projectone/logs/supervisor.log
+redirect_stderr = true
+environment=LANG=en.US.UTF-8,LC_ALL=en.US.UTF-8
+
+Em /webapps/projectone criar directoria logs
+mkdir logs
+
+supervisorctl reread
+Resultado:
+projection: available
+
+ls -larth (para ver as permissões e os owners
+Resultado:
+drwxr-xr-x 3 root           root    4.0K Jul 14 09:32 ..
+drwxr-xr-x 5 projectoneuser webapps 4.0K Jul 14 09:33 env
+drwxr-xr-x 5 projectoneuser webapps 4.0K Jul 15 10:37 projectone
+drwxr-xr-x 2 projectoneuser webapps 4.0K Jul 15 11:31 run
+drwxr-xr-x 2 root           root    4.0K Jul 15 11:48 logs
+drwxr-xr-x 6 projectoneuser webapps 4.0K Jul 15 11:48 .
+
+Para mudar o owner da directoria logs para projectoneuser:
+chown -R projectoneuser:webapps .
+
+Verificamos de novo com ls -larth:
+drwxr-xr-x 3 root           root    4.0K Jul 14 09:32 ..
+drwxr-xr-x 5 projectoneuser webapps 4.0K Jul 14 09:33 env
+drwxr-xr-x 5 projectoneuser webapps 4.0K Jul 15 10:37 projectone
+drwxr-xr-x 2 projectoneuser webapps 4.0K Jul 15 11:31 run
+drwxr-xr-x 2 projectoneuser webapps 4.0K Jul 15 11:48 logs
+drwxr-xr-x 6 projectoneuser webapps 4.0K Jul 15 11:48 .
+
+Para inicializar e começar:
+
+Ls
+ (para verificar que está tudo bem ..,.)
+supervisorctl update
+Resultado:
+projectone: added process group
+
+Verificar tudo:
+supervisorctl status
+
+
+########################################
+# [48:53] SET up nginx
+########################################
+
+cd /etc/nginx/sites-available
+
+Apagar o default:
+rm -f default
+
+nano projectone.conf
+Inserir:
+upstream projectone_app_server {
+        server unix:/webapps/projectone/run/gunicorn.sock fail_timeout=0;
+}
+
+server {
+        listen 80;
+        server_name 167.71.34.9;
+
+        access_log /webapps/projectone/logs/access.log;
+        error_log /webapps/projectone/logs/error.log;
+
+        location /static/ {
+                alias /webapps/projectone/projectone/static/;
+        }
+
+        location /media/{
+                alias /webapps/projectone/projectone/media/;
+        }
+
+        location / {
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+
+                proxy_set_header Host $http_host;
+
+                proxy_redirect off;
+
+
+                if (!-f $request_filename) {
+                        proxy_pass http://projectone_app_server;
+                }
+        }
+}
+
+
+Gravar e continuar
+
+cd ..
+cd sites-enabled 
+
+Em nginx/sites-enabled remover default e criar uma cópia do ficheiro sites-available/project.conf  (ou, em alternativa, criar um link simbólico, mas pode provocar erros:
+ln -s ../sites_available/projectone.conf .
+
+
+rm default
+
+
+Verificar com ls -larth
+
+Iniciar o nginx:
+(Em nginx/sites-enabled ...)
+service nginx start
+
+Quando há mudanças:
+
+supervisorctl restart projectone
+
+
+##################################
+# Data backup
+##################################
+
+Para fazer backup da base de dados Postgres para ficheiro JSON, usar o Django shell:
+
+/webapps/projectone# source env/bin/activate
+/webapps/projectone/projectone# python manage.py shell
+
+>>> from django.http import JsonResponse
+>>> from django.core.serializers import serialize
+>>> import json
+
+>>> from core.models import Post
+>>> Post.objects.all()
+>>> posts = Post.objects.all()
+>>> serialized_data = serialize("json", posts)
+>>> serialized_data = json.loads(serialized_data)
+>>> serialized_data
+>>> posts = serialised data
+>>> save_file = open("savedata.json", "w")
+>>> json.dump(serialized_data, save_file, indent = 6)
+>>> save_file.close(). # cria o ficheiro save data.json
+
+Para importar para a base de dados local (em dbsqlit)
+
+Ir para o local:
+copiar do servidor o savedata.json atualizado
+limpar as directorias de migrations 
+apagar o dbsqlite
+
+na directoria do manage.py:
+python manage.py makemigrations core
+python manage.py migrate --force
+python manage.py createsuperuser   
+
+/webapps/projectone# source env/bin/activate (se o ambiente não estiver já ativo)
+/webapps/projectone/projectone# python manage.py shell
+
+Executar o script de python para exportar o ficheiro JSON, savedata.json para o modelo Django:
+(env) ~/dev/dj10/webapps/projectone/projectone$ python manage.py shell < populate_DB.py
+
+

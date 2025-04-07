@@ -1,0 +1,127 @@
+{% extends "core/base.html" %}
+
+
+
+
+
+
+{% block content %}
+
+<style>
+	h1 {
+    text-align: center;
+    font-size: 4em;
+  font-family: medium-content-title-font, Georgia, Cambria, "Times New Roman", Times, serif; 
+}
+
+#article_area {
+  border: 1px;
+ margin: 0 auto;
+  width: 75%;
+  padding: 2px 5px;
+}
+
+.article h2 {
+  font-size: 1.5em;
+}
+
+.article p {
+  font-size: 1.25em;
+}
+#articleHeader a {
+  text-decoration: none;
+  color: inherit;
+  font-family: inherit;
+}
+#authorInfo {
+  font-size: 0.9em;
+}
+#authorInfo img {
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.centeredImage {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+h3 {
+    text-align: center;
+    font-size: 1.25em;
+   }
+body {
+  background-color: white;
+  font-family: onezero-yelliz, sans-serif;
+}
+.pictureDescription {
+  color: grey;
+}
+blockquote {
+  font-style: italic;
+}
+
+</style>
+
+
+<body>
+  <header>
+
+    <header>
+      <h1>
+       <a
+       href="https://medium.com/the-atlantic/youre-likely-to-get-the-coronavirus-88bb64a85549">
+          You’re Likely to Get the Coronavirus</a>
+          </h1>
+      <div id="article_area">
+        <div class="article">
+          <h2>Most cases are not life-threatening,
+            which is also what makes the virus a historic challenge to contain</h2>
+
+          <div id="authorInfo">
+            <img src="https://via.placeholder.com/60" class="floatLeft" />
+            <span> The Atlantic <a href="#" class="linkButton">Follow</a></span>
+            <br />
+            <span>Feb 26 · 12 min read</span>
+          </div>
+      <blockquote class="pictureDescription">
+        Wuhan International Conference and Exhibition Center on February 4th, 2020 in Wuhan, Hubei Province, China. Wuhan epidemic prevention headquarters started converting three existing venues, including a gymnasium and an exhibition center, into hospitals to receive patients infected with the novel coronavirus. Photo by Getty Images
+      </blockquote>
+        <blockquote class="author">
+        By James Hamblin
+      </blockquote>
+         
+          <p class="intro">
+            <p>
+              In May 1997, a 3-year-old boy developed what at first seemed like the common cold. When his symptoms — sore throat, fever, and cough — persisted for six days, he was taken to the Queen Elizabeth Hospital in Hong Kong. There his cough worsened, and he began gasping for air. Despite intensive care, the boy died.
+            </p>
+        </div>
+        <div class="article">
+          <p>
+            Puzzled by his rapid deterioration, doctors sent a sample of the boy’s sputum to China’s Department of Health. But the standard testing protocol couldn’t fully identify the virus that had caused the disease. The chief virologist decided to ship some of the sample to colleagues in other countries.
+          </p>
+        </div>
+        <div class="article">
+          <p>
+            At the U.S. Centers for Disease Control and Prevention in Atlanta, the boy’s sputum sat for a month, waiting for its turn in a slow process of antibody-matching analysis. The results eventually confirmed that this was a variant of influenza, the virus that has killed more people than any in history. But this type had never before been seen in humans. It was H5N1, or “avian flu,” discovered two decades prior, but known only to infect birds.
+          </p>
+        </div>
+        <div class="article">
+          <p>
+            By then, it was August. Scientists sent distress signals around the world. The Chinese government swiftly killed 1.5 million chickens (over the protests of chicken farmers). Further cases were closely monitored and isolated. By the end of the year there were 18 known cases in humans. Six people died.
+        </div>
+        <div class="article">
+          <p>
+            This was seen as a successful global response, and the virus was not seen again for years. In part, containment was possible because the disease was so severe: Those who got it became manifestly, extremely ill. H5N1 has a fatality rate of about 60 percent — if you get it, you’re likely to die. Yet since 2003, the virus has killed only 455 people. The much “milder” flu viruses, by contrast, kill fewer than 0.1 percent of people they infect, on average, but are responsible for hundreds of thousands of deaths every year.
+          </p>
+        </div>
+        <div class="article">
+          <p>
+            Severe illness caused by viruses such as H5N1 also means that infected people can be identified and isolated, or that they died quickly. They do not walk around feeling just a little under the weather, seeding the virus. The new coronavirus (known technically as SARS-CoV-2) that has been spreading around the world can cause a respiratory illness that can be severe. The disease (known as COVID-19) seems to have a fatality rate of less than 2 percent — exponentially lower than most outbreaks that make global news. The virus has raised alarm not despite that low fatality rate, but because of it.
+          </p>
+
+          </p>
+        </div>
+      </div>
+</body>
+{% endblock %}

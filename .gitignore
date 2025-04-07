@@ -1,3 +1,13 @@
+<<<<<<< HEAD
 .env
 .DS_Store
 .DS_Store?
+=======
+*.pyc
+*/*.pyc
+*/*/*.pyc
+
+env
+
+db.sqlite3
+>>>>>>> 29fbfc4f16c2cae1f7a87faab86ae88bffd0048d
